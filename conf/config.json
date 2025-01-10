@@ -1,0 +1,28 @@
+{
+  "active": "dev",
+  "app_name": "crm",
+  "dev": {
+    "log" : {
+      "level": "debug",
+      "outputPaths": "tmp/logs/"
+    },
+    "port" : "8080",
+    "mysql" : {
+      "host" : "127.0.0.1",
+      "port" : "3306",
+      "user" : "root",
+      "password" : "123456",
+      "database" : "study"
+    },
+    "redis" : {
+      "addr" : "127.0.0.1:6379",
+      "user" : "",
+      "password" : "",
+      "db" : 0
+    }
+  },
+  "test": {
+  },
+  "prod": {
+  }
+}
