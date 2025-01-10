@@ -2,13 +2,21 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
+	"ht-crm/src/ht/dto/req"
 	"ht-crm/src/ht/service"
 )
 
-// WechatProgramLogin 微信小程序登录
-func WechatProgramLogin(ctx *gin.Context) {
-	code := ctx.Query("code")
-	service.Code2Session(code)
+// WechatUserLogin 微信小程序登录
+func WechatUserLogin(ctx *gin.Context) {
+	loginReq := req.WechatProgramLoginReq{}
+	ctx.BindJSON(&loginReq)
+
+	service.Code2Session(loginReq.Code)
+
+}
+
+// WechatUserReg 微信小程序注册
+func WechatUserReg(ctx *gin.Context) {
 
 }
 

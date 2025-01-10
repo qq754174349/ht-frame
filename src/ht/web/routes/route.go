@@ -10,7 +10,7 @@ func RegisterRoutes(router *gin.Engine) {
 	{
 		userGroup := apiGroup.Group("/user")
 		{
-			userGroup.POST("/wechat/Program/login", user.WechatProgramLogin)
+			userGroup.POST("/wechat/Program/login", user.WechatUserLogin)
 		}
 		testGroup := apiGroup.Group("/test")
 		{
