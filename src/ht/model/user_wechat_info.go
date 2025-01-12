@@ -1,9 +1,7 @@
-package user
-
-import "ht-crm/src/ht/model"
+package model
 
 type WechatInfo struct {
-	model.Model
+	Model
 	// 用户id
 	UserId int64
 	// 微信昵称

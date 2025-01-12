@@ -1,6 +1,6 @@
 package req
 
-type WechatProgramLoginReq struct {
+type WechatUserRegReq struct {
 	// 登录凭证
 	Code string `json:"code"`
 	// 微信昵称
