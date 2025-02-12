@@ -2,13 +2,13 @@ package db
 
 import (
 	"github.com/go-redis/redis/v8"
-	"ht-crm/src/ht/config"
+	"ht-crm/autoconfigure"
 )
 
 var Redis *redis.Client
 
 func init() {
-	redisConfig := config.GetEnvCfg().Redis
+	redisConfig := autoconfigure.GetAppCig().Datasource.Redis
 	Redis = redis.NewClient(&redis.Options{
 		Addr:     redisConfig.Addr,
 		Username: redisConfig.User,

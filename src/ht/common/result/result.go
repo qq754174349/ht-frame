@@ -3,8 +3,8 @@ package result
 import "encoding/json"
 
 type Result struct {
-	Code    int         `json:"Code"`
-	Msg     string      `json:"Msg"`
+	Code    int         `json:"code"`
+	Msg     string      `json:"msg"`
 	Data    interface{} `json:"data"`
 	TraceId string      `json:"traceId"`
 }

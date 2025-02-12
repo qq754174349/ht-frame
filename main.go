@@ -1,10 +1,11 @@
 package main
 
 import (
-	_ "ht-crm/src/ht/config"
+	"ht-crm/autoconfigure"
 	"ht-crm/src/ht/web"
 )
 
 func main() {
+	autoconfigure.InitConfig("")
 	web.Start()
 }

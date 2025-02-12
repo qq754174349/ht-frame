@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"ht-crm/src/ht/config/log"
+	"ht-crm/logger"
 	"io"
 )
 
@@ -41,7 +41,7 @@ func ReqInfoLogger() gin.HandlerFunc {
 		if c.Request.Body != nil {
 			bodyBytes, err := io.ReadAll(c.Request.Body)
 			if err != nil {
-				log.Error(err)
+				logger.Error(err)
 			} else {
 				body = string(bodyBytes)
 			}
@@ -52,7 +52,7 @@ func ReqInfoLogger() gin.HandlerFunc {
 		traceId, _ := c.Get("traceId")
 
 		// 记录请求信息
-		log.TraceInfof(traceId.(string),
+		logger.WithTraceID(traceId.(string)).Infof(
 			"\nMethod: %s\nPath: %s\nHeaders: %s\nParams: %s\nBody: %s\n", method, path, string(headers), string(params), body)
 
 		// 调用下一步处理

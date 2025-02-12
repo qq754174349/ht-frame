@@ -17,7 +17,7 @@ type zapLog struct {
 	logger *zap.SugaredLogger
 }
 
-func newZapLog(appLogCfg *autoconfigure.LogConfig) Logger {
+func newZapLog(appLogCfg *LogConfig) Logger {
 	level, err := zap.ParseAtomicLevel(appLogCfg.Level)
 	if err != nil {
 		panic(err)
@@ -64,7 +64,7 @@ func newEncoderConfig() *zapcore.EncoderConfig {
 	}
 }
 
-func newFileWriteSyncer(outPutPath string, cfg *autoconfigure.LogConfig) *lumberjack.Logger {
+func newFileWriteSyncer(outPutPath string, cfg *LogConfig) *lumberjack.Logger {
 	logFile := fmt.Sprintf("%s%s-%s.log", outPutPath, autoconfigure.GetAppCig().AppName, time.Now().Format("2006-01-02-15"))
 	return &lumberjack.Logger{
 		Filename:   logFile,

@@ -1,7 +1,6 @@
 package user
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"ht-crm/src/ht/common/result"
 	"ht-crm/src/ht/dto/req"
@@ -11,11 +10,9 @@ import (
 // WechatUserLogin 微信小程序登录
 func WechatUserLogin(ctx *gin.Context) {
 	code := ctx.Query("code")
-	c := context.Background()
 	traceId := ctx.GetString("traceId")
-	context.WithValue(c, "traceId", traceId)
 
-	jwt, err := user.WechatUserLogin(c, code)
+	jwt, err := user.WechatUserLogin(ctx, code)
 	if err != nil {
 		ctx.Writer.WriteString(err.Error())
 	} else {
@@ -27,8 +24,5 @@ func WechatUserLogin(ctx *gin.Context) {
 func WechatUserReg(ctx *gin.Context) {
 	req := req.WechatUserRegReq{}
 	ctx.BindJSON(&req)
-	c := context.Background()
-	traceId := ctx.GetString("traceId")
-	context.WithValue(c, "traceId", traceId)
-	user.WechatUserReg(c, req)
+	user.WechatUserReg(ctx, req)
 }

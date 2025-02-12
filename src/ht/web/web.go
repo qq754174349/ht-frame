@@ -2,25 +2,25 @@ package web
 
 import (
 	"github.com/gin-gonic/gin"
-	"ht-crm/src/ht/config"
-	"ht-crm/src/ht/config/log"
+	"ht-crm/autoconfigure"
+	"ht-crm/logger"
 	"ht-crm/src/ht/web/middlewares"
 	"ht-crm/src/ht/web/routes"
 )
 
 func Start() {
-	gin.DefaultWriter = log.Writer()
-	gin.DefaultErrorWriter = log.Writer()
+	gin.DefaultWriter = logger.Writer()
+	gin.DefaultErrorWriter = logger.Writer()
 	r := gin.Default()
 	r.Use(middlewares.GenTraceId(), middlewares.ReqInfoLogger())
 
 	// 路由注册
 	routes.RegisterRoutes(r)
-	port := config.GetEnvCfg().Port
+	port := autoconfigure.GetAppCig().Web.Port
 
 	err := r.Run(":" + port)
 	if err != nil {
-		log.Error(err)
+		logger.Error(err)
 		return
 	}
 }

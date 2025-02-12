@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"ht-crm/logger"
 	"ht-crm/src/ht/config/db"
-	"ht-crm/src/ht/config/log"
 	"io"
 	"net/http"
 	"net/url"
@@ -33,7 +33,7 @@ func getAccToken() string {
 	key := "crm:wechat:accessToken"
 	accessToken, err := db.Redis.Get(context.Background(), key).Result()
 	if err != nil {
-		log.Error(err.Error())
+		logger.Error(err.Error())
 	}
 	if accessToken == "" {
 		getTokenUrl := "https://api.weixin.qq.com/cgi-bin/token"
@@ -47,7 +47,7 @@ func getAccToken() string {
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
-			log.Info("获取微信AppToken失败", err.Error())
+			logger.Info("获取微信AppToken失败", err.Error())
 		}
 		all, err := io.ReadAll(resp.Body)
 		if err != nil {
@@ -56,7 +56,7 @@ func getAccToken() string {
 		accessToken := &accessTokenResp{}
 		err = json.Unmarshal(all, accessToken)
 		if err != nil {
-			log.Error(err.Error())
+			logger.Error(err.Error())
 		}
 		db.Redis.Set(context.Background(), key, accessToken.AccessToken, time.Duration(accessToken.ExpiresIn-60)*time.Second)
 	}
@@ -75,7 +75,7 @@ func Code2Session(code string) (*Code2SessionResp, error) {
 	client := &http.Client{}
 	do, err := client.Do(req)
 	if err != nil {
-		log.Error("微信小程序登录错误", err.Error())
+		logger.Error("微信小程序登录错误", err.Error())
 		return nil, err
 	}
 	all, err := io.ReadAll(do.Body)
