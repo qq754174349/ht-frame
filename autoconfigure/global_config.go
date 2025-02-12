@@ -2,8 +2,9 @@
 package autoconfigure
 
 import (
-	"github.com/qq754174349/ht-frame/logge"
+	"github.com/qq754174349/ht-frame"
 	"github.com/spf13/viper"
+	"log"
 )
 
 const (
