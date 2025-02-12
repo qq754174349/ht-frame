@@ -1,4 +1,4 @@
-module ht-frame
+module github.com/qq754174349/ht-frame
 
 go 1.22
 
