@@ -5,7 +5,6 @@ import (
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"ht-crm/autoconfigure"
 	"io"
 	"os"
 	"time"
@@ -65,7 +64,7 @@ func newEncoderConfig() *zapcore.EncoderConfig {
 }
 
 func newFileWriteSyncer(outPutPath string, cfg *LogConfig) *lumberjack.Logger {
-	logFile := fmt.Sprintf("%s%s-%s.log", outPutPath, autoconfigure.GetAppCig().AppName, time.Now().Format("2006-01-02-15"))
+	logFile := fmt.Sprintf("%s-%s.log", outPutPath, time.Now().Format("2006-01-02-15"))
 	return &lumberjack.Logger{
 		Filename:   logFile,
 		MaxSize:    10,   // 考虑从配置中读取

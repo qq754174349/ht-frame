@@ -1,8 +1,8 @@
 package main
 
 import (
-	"ht-crm/autoconfigure"
-	"ht-crm/src/ht/web"
+	"github.com/qq754174349/ht-frame/autoconfigure"
+	"github.com/qq754174349/ht-frame/src/ht/web"
 )
 
 func main() {
