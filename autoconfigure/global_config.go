@@ -2,8 +2,8 @@
 package autoconfigure
 
 import (
+	"github.com/qq754174349/ht-frame/logge"
 	"github.com/spf13/viper"
-	"log"
 )
 
 const (
@@ -61,6 +61,7 @@ func InitConfig(active string) {
 	viper.SetConfigType(defaultConfigFileType)
 	viper.SetConfigName(defaultConfigFileName + "." + defaultConfigFileType)
 	// 读取配置文件
+	logger
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("读取配置文件失败: %v", err)
 	}

@@ -1,4 +1,4 @@
-module ht-crm
+module ht-frame
 
 go 1.22
 
