@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-type Initializer struct{}
+type AutoConfig struct{}
 
 // Logger 是日志门面接口
 type Logger interface {
@@ -32,7 +32,7 @@ const (
 
 var log Logger
 
-func (Initializer) Init(cfg interface{}) error {
+func (AutoConfig) Init(cfg interface{}) error {
 	logConfig := cfg.(config.LogConfig)
 	InitLogger(logConfig)
 	return nil

@@ -6,11 +6,11 @@ import (
 	"github.com/qq754174349/ht-frame/web/middlewares"
 )
 
-type Initializer struct{}
+type AutoConfig struct{}
 
 var cfg = config.WebConfig{}
 
-func (Initializer) Init(webCfg interface{}) error {
+func (AutoConfig) Init(webCfg interface{}) error {
 	cfg = webCfg.(config.WebConfig)
 	return nil
 }
