@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"github.com/qq754174349/ht-frame/config"
 	"io"
 )
 
@@ -31,13 +32,13 @@ const (
 
 var log Logger
 
-func (Initializer) Init(config interface{}) error {
-	logConfig := config.(LogConfig)
+func (Initializer) Init(cfg interface{}) error {
+	logConfig := cfg.(config.LogConfig)
 	InitLogger(logConfig)
 	return nil
 }
 
-func InitLogger(config LogConfig) {
+func InitLogger(config config.LogConfig) {
 	if config.Level == "" {
 		config.Level = defaultLevel
 	}

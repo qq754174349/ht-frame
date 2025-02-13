@@ -3,7 +3,7 @@ module github.com/qq754174349/ht-frame/autoconfigure
 go 1.23.6
 
 require (
-	github.com/qq754174349/ht-frame/config v0.0.0-20250213024627-2bc57490e834
+	github.com/qq754174349/ht-frame/config v0.0.0-20250213060114-beb7e19d0b3b
 	github.com/qq754174349/ht-frame/logger v0.0.0-20250213024627-2bc57490e834
 	github.com/spf13/viper v1.19.0
 )

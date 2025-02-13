@@ -3,7 +3,6 @@ package autoconfigure
 
 import (
 	"github.com/qq754174349/ht-frame/config"
-	"github.com/qq754174349/ht-frame/logger"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -53,12 +52,35 @@ func InitConfig(active string) {
 	}
 
 	autoConfigure()
-	logger.InitLogger(appCfg.Log)
 }
 
 func autoConfigure() {
 	for k, v := range initializers {
-		print(k, v)
+		switch k {
+		case config.Logger:
+			err := v.Init(appCfg.Log)
+			if err != nil {
+				log.Fatal(err)
+			}
+			break
+		case config.WEB:
+			err := v.Init(appCfg.Web)
+			if err != nil {
+				log.Fatal(err)
+			}
+			break
+		case config.REDIS:
+			err := v.Init(appCfg.Datasource.Redis)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case config.MYSQL:
+			err := v.Init(appCfg.Datasource.Mysql)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+		}
 	}
 }
 
