@@ -6,11 +6,6 @@ import (
 
 type Initializer struct{}
 
-type LogConfig struct {
-	Level       string
-	OutputPaths string `json:"output_paths" yaml:"output_paths" mapstructure:"output_paths"`
-}
-
 // Logger 是日志门面接口
 type Logger interface {
 	Debug(args ...interface{})

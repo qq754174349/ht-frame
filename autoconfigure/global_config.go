@@ -4,7 +4,6 @@ package autoconfigure
 import (
 	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
-	"github.com/qq754174349/ht-frame/web"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -15,37 +14,9 @@ const (
 )
 
 var (
-	appCfg       *AppConfig
+	appCfg       *config.AppConfig
 	initializers = make(map[string]config.Configuration)
 )
-
-type AppConfig struct {
-	Active     string
-	AppName    string `yaml:"app_name" json:"app_name" mapstructure:"app_name"`
-	Web        web.Web
-	Log        logger.LogConfig
-	Datasource datasource
-}
-
-type datasource struct {
-	Mysql MysqlConfig
-	Redis RedisConfig
-}
-
-type MysqlConfig struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	Database string
-}
-
-type RedisConfig struct {
-	Addr     string
-	User     string
-	Password string
-	DB       int
-}
 
 func Register(name string, conf config.Configuration) {
 	initializers[name] = conf

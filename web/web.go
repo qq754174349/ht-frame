@@ -7,10 +7,6 @@ import (
 
 type Initializer struct{}
 
-type Web struct {
-	Port string
-}
-
 var config = Web{}
 
 func (Initializer) Init(cfg interface{}) error {
