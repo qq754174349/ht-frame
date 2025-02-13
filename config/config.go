@@ -1,5 +1,5 @@
 package config
 
-type AutoConfiguration interface {
+type Configuration interface {
 	Init(config interface{}) error
 }
