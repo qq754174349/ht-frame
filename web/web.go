@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/gin-gonic/gin"
-	"ht-crm/web/middlewares"
+	"github.com/qq754174349/ht-frame/web/middlewares"
 )
 
 func Default(opts ...gin.OptionFunc) *gin.Engine {

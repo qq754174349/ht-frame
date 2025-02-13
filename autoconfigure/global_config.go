@@ -2,6 +2,7 @@
 package autoconfigure
 
 import (
+	"github.com/qq754174349/ht-frame/logger"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -19,7 +20,7 @@ type AppConfig struct {
 	Active     string
 	AppName    string `yaml:"app_name" json:"app_name" mapstructure:"app_name"`
 	Web        Web
-	Log        LogConfig
+	Log        logger.LogConfig
 	Datasource datasource
 }
 
@@ -30,11 +31,6 @@ type datasource struct {
 
 type Web struct {
 	Port string
-}
-
-type LogConfig struct {
-	Level       string
-	OutputPaths string `json:"output_paths" yaml:"output_paths" mapstructure:"output_paths"`
 }
 
 type MysqlConfig struct {
@@ -61,7 +57,6 @@ func InitConfig(active string) {
 	viper.SetConfigType(defaultConfigFileType)
 	viper.SetConfigName(defaultConfigFileName + "." + defaultConfigFileType)
 	// 读取配置文件
-	logger
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("读取配置文件失败: %v", err)
 	}
@@ -86,6 +81,8 @@ func InitConfig(active string) {
 	if err != nil {
 		log.Fatal("配置文件格式错误")
 	}
+
+	logger.InitLogger(appCfg.Log)
 }
 
 func GetAppCig() *AppConfig {
