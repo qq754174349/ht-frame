@@ -1,4 +1,4 @@
-// Package config 全局配置文件
+// Package autoconfigure Package config 全局配置文件
 package autoconfigure
 
 import (
@@ -46,7 +46,7 @@ func InitConfig(active string) {
 		log.Fatalf("读取配置文件失败: %v", err)
 	}
 
-	appCfg = &AppConfig{}
+	appCfg = &config.AppConfig{}
 	err := viper.Unmarshal(appCfg)
 	if err != nil {
 		log.Fatal("配置文件格式错误")
@@ -57,9 +57,11 @@ func InitConfig(active string) {
 }
 
 func autoConfigure() {
-
+	for k, v := range initializers {
+		print(k, v)
+	}
 }
 
-func GetAppCig() *AppConfig {
+func GetAppCig() *config.AppConfig {
 	return appCfg
 }

@@ -3,6 +3,7 @@ package logger
 import (
 	"fmt"
 	"github.com/natefinch/lumberjack"
+	"github.com/qq754174349/ht-frame/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
@@ -16,7 +17,7 @@ type zapLog struct {
 	logger *zap.SugaredLogger
 }
 
-func newZapLog(appLogCfg *LogConfig) Logger {
+func newZapLog(appLogCfg *config.LogConfig) Logger {
 	level, err := zap.ParseAtomicLevel(appLogCfg.Level)
 	if err != nil {
 		panic(err)
@@ -63,7 +64,7 @@ func newEncoderConfig() *zapcore.EncoderConfig {
 	}
 }
 
-func newFileWriteSyncer(outPutPath string, cfg *LogConfig) *lumberjack.Logger {
+func newFileWriteSyncer(outPutPath string, cfg *config.LogConfig) *lumberjack.Logger {
 	logFile := fmt.Sprintf("%s-%s.log", outPutPath, time.Now().Format("2006-01-02-15"))
 	return &lumberjack.Logger{
 		Filename:   logFile,

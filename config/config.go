@@ -1,5 +1,12 @@
 package config
 
+const (
+	Logger = "log"
+	WEB    = "web"
+	MYSQL  = "mysql"
+	REDIS  = "redis"
+)
+
 type AppConfig struct {
 	Active     string
 	AppName    string `yaml:"app_name" json:"app_name" mapstructure:"app_name"`
