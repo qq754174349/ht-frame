@@ -4,6 +4,8 @@ import (
 	"io"
 )
 
+type Initializer struct{}
+
 type LogConfig struct {
 	Level       string
 	OutputPaths string `json:"output_paths" yaml:"output_paths" mapstructure:"output_paths"`
@@ -33,6 +35,12 @@ const (
 )
 
 var log Logger
+
+func (Initializer) Init(config interface{}) error {
+	logConfig := config.(LogConfig)
+	InitLogger(logConfig)
+	return nil
+}
 
 func InitLogger(config LogConfig) {
 	if config.Level == "" {

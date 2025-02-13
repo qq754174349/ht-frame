@@ -2,7 +2,9 @@
 package autoconfigure
 
 import (
+	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
+	"github.com/qq754174349/ht-frame/web"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -13,13 +15,14 @@ const (
 )
 
 var (
-	appCfg *AppConfig
+	appCfg       *AppConfig
+	initializers = make(map[string]config.Configuration)
 )
 
 type AppConfig struct {
 	Active     string
 	AppName    string `yaml:"app_name" json:"app_name" mapstructure:"app_name"`
-	Web        Web
+	Web        web.Web
 	Log        logger.LogConfig
 	Datasource datasource
 }
@@ -27,10 +30,6 @@ type AppConfig struct {
 type datasource struct {
 	Mysql MysqlConfig
 	Redis RedisConfig
-}
-
-type Web struct {
-	Port string
 }
 
 type MysqlConfig struct {
@@ -48,8 +47,8 @@ type RedisConfig struct {
 	DB       int
 }
 
-func init() {
-	InitConfig("")
+func Register(name string, conf config.Configuration) {
+	initializers[name] = conf
 }
 
 func InitConfig(active string) {
@@ -82,7 +81,12 @@ func InitConfig(active string) {
 		log.Fatal("配置文件格式错误")
 	}
 
+	autoConfigure()
 	logger.InitLogger(appCfg.Log)
+}
+
+func autoConfigure() {
+
 }
 
 func GetAppCig() *AppConfig {
