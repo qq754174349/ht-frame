@@ -1,4 +1,4 @@
-package mysql
+package db
 
 import (
 	"github.com/qq754174349/ht-frame/config"

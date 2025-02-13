@@ -1,4 +1,4 @@
-module github.com/qq754174349/ht-frame/mysql
+module github.com/qq754174349/ht-frame/db
 
 go 1.23.6
 

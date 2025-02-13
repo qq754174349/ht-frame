@@ -3,7 +3,7 @@ package config
 const (
 	Logger = "log"
 	WEB    = "web"
-	MYSQL  = "mysql"
+	MYSQL  = "db"
 	REDIS  = "redis"
 )
 
