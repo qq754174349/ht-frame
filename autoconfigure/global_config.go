@@ -57,6 +57,9 @@ func InitConfig(active string) {
 
 func autoConfigure() {
 	for _, v := range initializers {
-		v.Init(config.GetAppCfg())
+		err := v.Init(config.GetAppCfg())
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }

@@ -3,7 +3,7 @@ module github.com/qq754174349/ht-frame/autoconfigure
 go 1.23.6
 
 require (
-	github.com/qq754174349/ht-frame/config v0.0.0-20250213060114-beb7e19d0b3b
+	github.com/qq754174349/ht-frame/config v0.0.0-20250217060819-6cc4abb1410d
 	github.com/spf13/viper v1.19.0
 )
 
@@ -23,7 +23,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac // indirect
+	golang.org/x/exp v0.0.0-20250215185904-eff6e970281f // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/text v0.22.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
