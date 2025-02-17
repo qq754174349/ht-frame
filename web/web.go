@@ -11,10 +11,10 @@ type AutoConfig struct{}
 
 var cfg = config.WebConfig{}
 
-func (AutoConfig) Init(webCfg interface{}) error {
+func (AutoConfig) Init(webCfg *config.AppConfig) error {
 	gin.DefaultWriter = logger.Writer()
 	gin.DefaultErrorWriter = logger.Writer()
-	cfg = webCfg.(config.WebConfig)
+	cfg = webCfg.Web
 	return nil
 }
 

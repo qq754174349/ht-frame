@@ -9,8 +9,8 @@ var Redis *redis.Client
 
 type AutoConfig struct{}
 
-func (AutoConfig) Init(cfg interface{}) error {
-	redisConfig := cfg.(config.RedisConfig)
+func (AutoConfig) Init(cfg *config.AppConfig) error {
+	redisConfig := cfg.Datasource.Redis
 	Redis = redis.NewClient(&redis.Options{
 		Addr:     redisConfig.Addr,
 		Username: redisConfig.User,

@@ -32,8 +32,8 @@ const (
 
 var log Logger
 
-func (AutoConfig) Init(cfg interface{}) error {
-	logConfig := cfg.(config.LogConfig)
+func (AutoConfig) Init(cfg *config.AppConfig) error {
+	logConfig := cfg.Log
 	InitLogger(logConfig)
 	return nil
 }

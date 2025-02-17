@@ -50,40 +50,13 @@ func InitConfig(active string) {
 	if err != nil {
 		log.Fatal("配置文件格式错误")
 	}
+	config.SetAppCfg(appCfg)
 
 	autoConfigure()
 }
 
 func autoConfigure() {
-	for k, v := range initializers {
-		switch k {
-		case config.Logger:
-			err := v.Init(appCfg.Log)
-			if err != nil {
-				log.Fatal(err)
-			}
-			break
-		case config.WEB:
-			err := v.Init(appCfg.Web)
-			if err != nil {
-				log.Fatal(err)
-			}
-			break
-		case config.REDIS:
-			err := v.Init(appCfg.Datasource.Redis)
-			if err != nil {
-				log.Fatal(err)
-			}
-		case config.MYSQL:
-			err := v.Init(appCfg.Datasource.Mysql)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-		}
+	for _, v := range initializers {
+		v.Init(config.GetAppCfg())
 	}
-}
-
-func GetAppCig() *config.AppConfig {
-	return appCfg
 }

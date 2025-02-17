@@ -47,7 +47,7 @@ type RedisConfig struct {
 }
 
 type Configuration interface {
-	Init(config interface{}) error
+	Init(config *AppConfig) error
 }
 
 func SetAppCfg(appConfig *AppConfig) {
