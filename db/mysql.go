@@ -18,7 +18,7 @@ var gormConfig = &gorm.Config{
 	},
 }
 
-func (AutoConfig) Init(cfg config.AppConfig) error {
+func (AutoConfig) Init(cfg *config.AppConfig) error {
 	mysqlConfig := cfg.Datasource.Mysql
 	var err error
 	Mysql, err = gorm.Open(mysql.Open(GetDataSourceName(mysqlConfig)), gormConfig)
