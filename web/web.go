@@ -14,6 +14,9 @@ var cfg = config.WebConfig{}
 func (AutoConfig) Init(webCfg *config.AppConfig) error {
 	gin.DefaultWriter = logger.Writer()
 	gin.DefaultErrorWriter = logger.Writer()
+	if webCfg.Active == "pro" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	cfg = webCfg.Web
 	return nil
 }

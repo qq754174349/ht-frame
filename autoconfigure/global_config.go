@@ -36,6 +36,8 @@ func InitConfig(active string) {
 			log.Fatalf("没有激活的配置")
 		}
 		active = activeVal.(string)
+	} else {
+		viper.Set("active", active)
 	}
 	log.Printf("Active environment:%s", active)
 
