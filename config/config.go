@@ -7,6 +7,8 @@ const (
 	REDIS  = "redis"
 )
 
+var appCfg *AppConfig
+
 type AppConfig struct {
 	Active     string
 	AppName    string `yaml:"app_name" json:"app_name" mapstructure:"app_name"`
@@ -46,4 +48,12 @@ type RedisConfig struct {
 
 type Configuration interface {
 	Init(config interface{}) error
+}
+
+func SetAppCfg(appConfig *AppConfig) {
+	appCfg = appConfig
+}
+
+func GetAppCfg() *AppConfig {
+	return appCfg
 }
