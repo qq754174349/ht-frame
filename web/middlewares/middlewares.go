@@ -31,12 +31,6 @@ func RequestInfoLogger() gin.HandlerFunc {
 			headers = []byte("{}")
 		}
 
-		// 获取路径参数并转化为 JSON
-		params, err := json.Marshal(c.Params)
-		if err != nil {
-			params = []byte("{}")
-		}
-
 		// 保存请求体数据，并且不影响后续中间件
 		var body string
 		if c.Request.Body != nil {
@@ -56,10 +50,11 @@ func RequestInfoLogger() gin.HandlerFunc {
 		// 记录请求信息
 		logger.WithTraceID(traceID.(string)).Infof(
 			"Request: method=%s, path=%s, headers=%s, params=%s, body=%s",
-			method, path, string(headers), string(params), body,
+			method, path, string(headers), c.Request.URL.RawQuery, body,
 		)
 
 		// 调用下一步处理
 		c.Next()
+
 	}
 }
