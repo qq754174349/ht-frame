@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
 	"github.com/qq754174349/ht-frame/web/middlewares"
@@ -29,6 +30,7 @@ func Default(opts ...gin.OptionFunc) *gin.Engine {
 
 func Run(regRoutes func(engine *gin.Engine), opts ...gin.OptionFunc) error {
 	engine := Default(opts...)
+	engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	regRoutes(engine)
 	err := engine.Run(":" + cfg.Port)
 	if err != nil {
