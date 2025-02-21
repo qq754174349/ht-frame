@@ -24,7 +24,7 @@ func (AutoConfig) Init(webCfg *config.AppConfig) error {
 
 func Default(opts ...gin.OptionFunc) *gin.Engine {
 	engine := gin.Default(opts...)
-	engine.Use(middlewares.GenerateTraceID(), middlewares.RequestInfoLogger())
+	engine.Use(middlewares.GenerateTraceID(), middlewares.RequestInfoLogger(), middlewares.Prometheus())
 	return engine
 }
 

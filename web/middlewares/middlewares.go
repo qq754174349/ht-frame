@@ -6,8 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/qq754174349/ht-frame/logger"
+	"github.com/qq754174349/ht-frame/web/prometheus"
 	"io"
 	"net/http"
+	"time"
 )
 
 // GenerateTraceID 生成链路 ID
@@ -56,5 +58,25 @@ func RequestInfoLogger() gin.HandlerFunc {
 		// 调用下一步处理
 		c.Next()
 
+	}
+}
+
+// Prometheus 普罗米修斯监控请求
+func Prometheus() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// 记录请求开始时间
+		start := time.Now()
+
+		// 设置路由
+		route := c.FullPath()
+
+		// 继续处理请求
+		c.Next()
+
+		// 记录请求持续时间
+		prometheus.Duration.WithLabelValues(c.Request.Method, route).Observe(time.Since(start).Seconds())
+
+		// 更新请求计数器
+		prometheus.Requests.WithLabelValues(c.Request.Method, route).Inc()
 	}
 }

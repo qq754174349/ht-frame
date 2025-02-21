@@ -3,15 +3,28 @@ package prometheus
 import "github.com/prometheus/client_golang/prometheus"
 
 var (
-	httpRequestsTotal = prometheus.NewCounterVec(
+	// Requests 创建一个请求计数器指标
+	Requests = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "http_requests_total",
+			Name: "gin_http_requests_total",
 			Help: "Total number of HTTP requests",
 		},
-		[]string{"method", "path", "status"},
+		[]string{"method", "route"},
+	)
+
+	// Duration 创建一个请求持续时间指标
+	Duration = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "gin_http_duration_seconds",
+			Help:    "Histogram of response durations for HTTP requests",
+			Buckets: prometheus.DefBuckets,
+		},
+		[]string{"method", "route"},
 	)
 )
 
 func init() {
-	prometheus.MustRegister(httpRequestsTotal)
+	// 注册指标
+	prometheus.MustRegister(Requests)
+	prometheus.MustRegister(Duration)
 }
