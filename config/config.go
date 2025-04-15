@@ -15,6 +15,7 @@ type AppConfig struct {
 	Web        WebConfig
 	Log        LogConfig
 	Datasource datasource
+	Consul     ConsulConfig
 }
 
 type LogConfig struct {
