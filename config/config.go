@@ -46,6 +46,10 @@ type RedisConfig struct {
 	DB       int
 }
 
+type ConsulConfig struct {
+	Addr string
+}
+
 type Configuration interface {
 	Init(config *AppConfig) error
 }
