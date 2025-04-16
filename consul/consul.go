@@ -37,7 +37,7 @@ func (AutoConfig) Init(cfg *config.AppConfig) error {
 		Port: port,
 		Check: &api.AgentServiceCheck{
 			HTTP:     fmt.Sprintf("http://%s:%d/health", localIP, port),
-			Interval: "10s",
+			Interval: "20s",
 		},
 	}
 	if err := client.Agent().ServiceRegister(reg); err != nil {
