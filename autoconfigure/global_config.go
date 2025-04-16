@@ -14,11 +14,11 @@ const (
 
 var (
 	appCfg       *config.AppConfig
-	initializers = make(map[string]config.Configuration)
+	initializers []config.Configuration
 )
 
-func Register(name string, conf config.Configuration) {
-	initializers[name] = conf
+func Register(conf ...config.Configuration) {
+	initializers = append(initializers, conf...)
 }
 
 func InitConfig(active string) {
