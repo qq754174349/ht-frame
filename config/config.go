@@ -5,6 +5,7 @@ const (
 	WEB    = "web"
 	MYSQL  = "db"
 	REDIS  = "redis"
+	CONSUL = "consul"
 )
 
 var appCfg *AppConfig
