@@ -31,6 +31,7 @@ func Default(opts ...gin.OptionFunc) *gin.Engine {
 func Run(regRoutes func(engine *gin.Engine), opts ...gin.OptionFunc) error {
 	engine := Default(opts...)
 	engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
+	engine.GET("/health", func(c *gin.Context) {})
 	regRoutes(engine)
 	err := engine.Run(":" + cfg.Port)
 	if err != nil {
