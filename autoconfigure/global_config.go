@@ -31,7 +31,7 @@ func Bootstrap(active string) {
 	}
 
 	if active == "" {
-		active := viper.GetString("active")
+		active = viper.GetString("active")
 		if active == "nil" {
 			log.Fatalf("没有激活的配置")
 		}
