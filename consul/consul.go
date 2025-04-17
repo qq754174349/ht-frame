@@ -3,6 +3,7 @@ package consul
 import (
 	"fmt"
 	"github.com/hashicorp/consul/api"
+	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/config"
 	"log"
 	"net"
@@ -11,6 +12,10 @@ import (
 )
 
 type AutoConfig struct{}
+
+func init() {
+	autoconfigure.Register(&AutoConfig{})
+}
 
 func (AutoConfig) Init(cfg *config.AppConfig) error {
 	return StartConsulAutoRegister(cfg)

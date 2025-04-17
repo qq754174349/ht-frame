@@ -21,7 +21,7 @@ func Register(conf ...config.Configuration) {
 	initializers = append(initializers, conf...)
 }
 
-func InitConfig(active string) {
+func Bootstrap(active string) {
 	viper.AddConfigPath("config/")
 	viper.SetConfigType(defaultConfigFileType)
 	viper.SetConfigName(defaultConfigFileName + "." + defaultConfigFileType)

@@ -2,10 +2,15 @@ package redis
 
 import (
 	"github.com/go-redis/redis/v8"
+	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/config"
 )
 
 var Redis *redis.Client
+
+func init() {
+	autoconfigure.Register(AutoConfig{})
+}
 
 type AutoConfig struct{}
 

@@ -1,6 +1,7 @@
 package db
 
 import (
+	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,6 +17,10 @@ var gormConfig = &gorm.Config{
 	NamingStrategy: schema.NamingStrategy{
 		SingularTable: true,
 	},
+}
+
+func init() {
+	autoconfigure.Register(AutoConfig{})
 }
 
 func (AutoConfig) Init(cfg *config.AppConfig) error {

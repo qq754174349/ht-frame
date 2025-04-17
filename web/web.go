@@ -3,7 +3,9 @@ package web
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/config"
+	_ "github.com/qq754174349/ht-frame/consul"
 	"github.com/qq754174349/ht-frame/logger"
 	"github.com/qq754174349/ht-frame/web/middlewares"
 )
@@ -11,6 +13,10 @@ import (
 type AutoConfig struct{}
 
 var cfg = config.WebConfig{}
+
+func init() {
+	autoconfigure.Register(AutoConfig{})
+}
 
 func (AutoConfig) Init(webCfg *config.AppConfig) error {
 	gin.DefaultWriter = logger.Writer()

@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/config"
 	"io"
 )
@@ -31,6 +32,10 @@ const (
 )
 
 var log Logger
+
+func init() {
+	autoconfigure.Register(AutoConfig{})
+}
 
 func (AutoConfig) Init(cfg *config.AppConfig) error {
 	logConfig := cfg.Log
