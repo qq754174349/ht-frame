@@ -29,8 +29,8 @@ type WebConfig struct {
 }
 
 type datasource struct {
-	Mysql MysqlConfig
-	Redis RedisConfig
+	Mysql map[string]MysqlConfig `yaml:"mysql" mapstructure:"mysql"`
+	Redis map[string]RedisConfig `yaml:"redis" mapstructure:"redis"`
 }
 
 type MysqlConfig struct {
