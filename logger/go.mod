@@ -8,15 +8,15 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v1.4.0 // indirect
+	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.10 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
-	github.com/qq754174349/ht-frame/autoconfigure v0.0.0-20250416031718-74c513744f91 // indirect
-	github.com/qq754174349/ht-frame/config v0.0.0-20250416031718-74c513744f91 // indirect
+	github.com/qq754174349/ht-frame/autoconfigure v0.0.0-20250417035217-89ea262690f7 // indirect
+	github.com/qq754174349/ht-frame/config v0.0.0-20250417035217-89ea262690f7 // indirect
 	github.com/sagikazarmark/locafero v0.9.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect

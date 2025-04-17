@@ -4,7 +4,7 @@ go 1.23.6
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/qq754174349/ht-frame/config v0.0.0-20250417022044-09869590cfaa
+	github.com/qq754174349/ht-frame/config v0.0.0-20250417035217-89ea262690f7
 )
 
 require (

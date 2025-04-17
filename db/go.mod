@@ -3,7 +3,7 @@ module github.com/qq754174349/ht-frame/db
 go 1.23.6
 
 require (
-	github.com/qq754174349/ht-frame/config v0.0.0-20250417022044-09869590cfaa
+	github.com/qq754174349/ht-frame/config v0.0.0-20250417035217-89ea262690f7
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
