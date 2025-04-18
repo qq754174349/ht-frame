@@ -22,7 +22,7 @@ func Register(conf ...config.Configuration) {
 }
 
 func Bootstrap(active string) {
-	viper.AddConfigPath("config/")
+	viper.AddConfigPath("configs/")
 	viper.SetConfigType(defaultConfigFileType)
 	viper.SetConfigName(defaultConfigFileName + "." + defaultConfigFileType)
 	// 读取配置文件
