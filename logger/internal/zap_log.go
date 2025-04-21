@@ -1,9 +1,10 @@
-package logger
+package internal
 
 import (
 	"fmt"
 	"github.com/natefinch/lumberjack"
 	"github.com/qq754174349/ht-frame/config"
+	"github.com/qq754174349/ht-frame/logger/logiface"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
@@ -17,7 +18,7 @@ type zapLog struct {
 	logger *zap.SugaredLogger
 }
 
-func newZapLog(appLogCfg *config.LogConfig) Logger {
+func NewZapLog(appLogCfg *config.LogConfig) logiface.Logger {
 	level, err := zap.ParseAtomicLevel(appLogCfg.Level)
 	if err != nil {
 		panic(err)
@@ -86,11 +87,11 @@ func (log zapLog) Warnf(template string, args ...interface{})  { log.logger.Warn
 func (log zapLog) Errorf(template string, args ...interface{}) { log.logger.Errorf(template, args...) }
 func (log zapLog) Fatalf(template string, args ...interface{}) { log.logger.Fatalf(template, args...) }
 
-func (log zapLog) WithTraceID(traceId string) Logger {
+func (log zapLog) WithTraceID(traceId string) logiface.Logger {
 	return &zapLog{logger: log.logger.With("traceId", traceId).WithOptions(zap.AddCallerSkip(-1))}
 }
 
-func (log zapLog) WithFields(fields map[string]interface{}) Logger {
+func (log zapLog) WithFields(fields map[string]interface{}) logiface.Logger {
 	zapFields := make([]interface{}, 0, len(fields)*2)
 	for k, v := range fields {
 		zapFields = append(zapFields, k, v)

@@ -3,35 +3,19 @@ package logger
 import (
 	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/config"
+	"github.com/qq754174349/ht-frame/logger/internal"
+	"github.com/qq754174349/ht-frame/logger/logiface"
 	"io"
 )
 
 type AutoConfig struct{}
 
-// Logger 是日志门面接口
-type Logger interface {
-	Debug(args ...interface{})
-	Info(args ...interface{})
-	Warn(args ...interface{})
-	Error(args ...interface{})
-	Fatal(args ...interface{})
-	Debugf(template string, args ...interface{})
-	Infof(template string, args ...interface{})
-	Warnf(template string, args ...interface{})
-	Errorf(template string, args ...interface{})
-	Fatalf(template string, args ...interface{})
-	WithTraceID(traceId string) Logger               // 返回一个新的 Logger 实例，附带 TraceID
-	WithFields(fields map[string]interface{}) Logger // 返回一个新的 Logger 实例，附带字段
-	RedirectStdLog()
-	Writer() io.Writer
-}
-
 const (
 	defaultLevel       = "info"
-	defaultOutputPaths = "tmp/logs/"
+	defaultOutputPaths = "logs/"
 )
 
-var log Logger
+var log logiface.Logger
 
 func init() {
 	autoconfigure.Register(AutoConfig{})
@@ -51,7 +35,7 @@ func InitLogger(config config.LogConfig) {
 		config.OutputPaths = defaultOutputPaths
 	}
 
-	log = newZapLog(&config)
+	log = internal.NewZapLog(&config)
 	// 替换标准日志
 	log.RedirectStdLog()
 }
@@ -67,11 +51,11 @@ func Warnf(template string, args ...interface{})  { log.Warnf(template, args...)
 func Errorf(template string, args ...interface{}) { log.Errorf(template, args...) }
 func Fatalf(template string, args ...interface{}) { log.Fatalf(template, args...) }
 
-func WithTraceID(traceId string) Logger {
+func WithTraceID(traceId string) logiface.Logger {
 	return log.WithTraceID(traceId)
 }
 
-func WithFields(fields map[string]interface{}) Logger {
+func WithFields(fields map[string]interface{}) logiface.Logger {
 	return log.WithFields(fields)
 }
 

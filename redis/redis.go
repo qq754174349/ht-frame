@@ -3,13 +3,12 @@ package redis
 import (
 	"context"
 	"fmt"
-	"sync"
-	"time"
-
 	"github.com/go-redis/redis/v8"
 	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
+	"sync"
+	"time"
 )
 
 var (

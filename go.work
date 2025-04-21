@@ -1,0 +1,12 @@
+go 1.23.6
+
+use (
+    ./config
+    ./logger
+    ./db
+    ./web
+    ./redis
+    ./consul
+    ./autoconfigure
+    ./common
+)
