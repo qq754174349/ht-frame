@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/qq754174349/ht-frame/autoconfigure"
-	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
+	"github.com/spf13/viper"
 	"sync"
 	"time"
 )
@@ -14,17 +14,37 @@ import (
 var (
 	redisInstances sync.Map
 	defaultName    string
+	config         *Redis
 )
+
+type Redis struct {
+	Redis map[string]Config `yaml:"redis" mapstructure:"redis"`
+}
+
+type Config struct {
+	Addr     string
+	User     string
+	Password string
+	DB       int
+}
 
 type AutoConfig struct{}
 
 func init() {
-	autoconfigure.Register(AutoConfig{})
+	err := autoconfigure.Register(AutoConfig{})
+	if err != nil {
+		logger.Fatal("redis 自动配置注册失败")
+	}
 }
 
-func (AutoConfig) Init(cfg *config.AppConfig) error {
+func (AutoConfig) Init() error {
+	config = &Redis{}
+	err := viper.Unmarshal(config)
+	if err != nil {
+		logger.Fatal("配置文件格式错误")
+	}
 	first := true
-	for name, redisCfg := range cfg.Datasource.Redis {
+	for name, redisCfg := range config.Redis {
 		if err := initRedis(redisCfg, name); err != nil {
 			return fmt.Errorf("redis[%s]初始化失败: %v", name, err)
 		}
@@ -40,7 +60,7 @@ func (AutoConfig) Init(cfg *config.AppConfig) error {
 	return nil
 }
 
-func initRedis(cfg config.RedisConfig, name string) error {
+func initRedis(cfg Config, name string) error {
 	client := redis.NewClient(&redis.Options{
 		Addr:     cfg.Addr,
 		Username: cfg.User,
@@ -85,7 +105,7 @@ func ping(client *redis.Client) error {
 	return client.Ping(ctx).Err()
 }
 
-func monitor(name string, client *redis.Client, cfg config.RedisConfig) {
+func monitor(name string, client *redis.Client, cfg Config) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
@@ -97,7 +117,7 @@ func monitor(name string, client *redis.Client, cfg config.RedisConfig) {
 	}
 }
 
-func reconnect(name string, cfg config.RedisConfig) error {
+func reconnect(name string, cfg Config) error {
 	if val, ok := redisInstances.Load(name); ok {
 		if client, ok := val.(*redis.Client); ok {
 			_ = client.Close()

@@ -4,6 +4,15 @@ import (
 	"io"
 )
 
+type Log struct {
+	Log Config
+}
+
+type Config struct {
+	Level       string
+	OutputPaths string `json:"output_paths" yaml:"output_paths" mapstructure:"output_paths"`
+}
+
 type Logger interface {
 	Debug(args ...interface{})
 	Info(args ...interface{})

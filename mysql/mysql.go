@@ -1,12 +1,12 @@
-package db
+package mysql
 
 import (
 	"context"
 	"database/sql"
 	"fmt"
 	"github.com/qq754174349/ht-frame/autoconfigure"
-	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -23,17 +23,38 @@ var (
 		},
 		PrepareStmt: true,
 	}
+	config *Mysql
 )
+
+type Mysql struct {
+	Mysql map[string]Config `yaml:"mysql" mapstructure:"mysql"`
+}
+
+type Config struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Database string
+}
 
 type AutoConfig struct{}
 
 func init() {
-	autoconfigure.Register(AutoConfig{})
+	err := autoconfigure.Register(AutoConfig{})
+	if err != nil {
+		logger.Fatal("mysql 自动配置注册失败")
+	}
 }
 
-func (AutoConfig) Init(cfg *config.AppConfig) error {
+func (AutoConfig) Init() error {
+	config = &Mysql{}
+	err := viper.Unmarshal(config)
+	if err != nil {
+		logger.Fatal("配置文件格式错误")
+	}
 	first := true
-	for name, mysqlCfg := range cfg.Datasource.Mysql {
+	for name, mysqlCfg := range config.Mysql {
 		if err := initMySQL(mysqlCfg, name); err != nil {
 			return fmt.Errorf("MySQL[%s]初始化失败: %v", name, err)
 		}
@@ -50,7 +71,7 @@ func (AutoConfig) Init(cfg *config.AppConfig) error {
 	return nil
 }
 
-func initMySQL(cfg config.MysqlConfig, name string) error {
+func initMySQL(cfg Config, name string) error {
 	dsn := buildDSN(cfg)
 	db, err := gorm.Open(mysql.Open(dsn), gormConfig)
 	if err != nil {
@@ -96,12 +117,12 @@ func Get(name ...string) (*gorm.DB, error) {
 }
 
 // 内部工具函数
-func buildDSN(cfg config.MysqlConfig) string {
+func buildDSN(cfg Config) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local&timeout=5s",
 		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.Database)
 }
 
-func configurePool(sqlDB *sql.DB, cfg config.MysqlConfig) {
+func configurePool(sqlDB *sql.DB, cfg Config) {
 	maxIdle := 10
 
 	sqlDB.SetMaxIdleConns(maxIdle)
@@ -115,7 +136,7 @@ func ping(db *sql.DB) error {
 	return db.PingContext(ctx)
 }
 
-func monitor(name string, db *gorm.DB, cfg config.MysqlConfig) {
+func monitor(name string, db *gorm.DB, cfg Config) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
@@ -127,7 +148,7 @@ func monitor(name string, db *gorm.DB, cfg config.MysqlConfig) {
 	}
 }
 
-func reconnect(name string, cfg config.MysqlConfig) error {
+func reconnect(name string, cfg Config) error {
 	if val, ok := mysqlInstances.Load(name); ok {
 		if db, ok := val.(*gorm.DB); ok {
 			if sqlDB, err := db.DB(); err == nil {
@@ -158,7 +179,7 @@ func verify(db *gorm.DB) error {
 
 	// 可选：检查数据库版本（增强验证）
 	//var version string
-	//if err := db.Raw("SELECT VERSION()").Scan(&version).Error; err != nil {
+	//if err := mysql.Raw("SELECT VERSION()").Scan(&version).Error; err != nil {
 	//	return fmt.Errorf("数据库版本检查失败: %v", err)
 	//}
 	//

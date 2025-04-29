@@ -2,6 +2,7 @@
 package autoconfigure
 
 import (
+	"fmt"
 	"github.com/qq754174349/ht-frame/config"
 	"github.com/spf13/viper"
 	"log"
@@ -14,14 +15,14 @@ const (
 
 var (
 	appCfg       *config.AppConfig
-	initializers []config.Configuration
+	initializers []Configuration
 )
 
-func Register(conf ...config.Configuration) {
-	initializers = append(initializers, conf...)
+type Configuration interface {
+	Init() error
 }
 
-func Bootstrap(active string) {
+func init() {
 	viper.AddConfigPath("configs/")
 	viper.SetConfigType(defaultConfigFileType)
 	viper.SetConfigName(defaultConfigFileName + "." + defaultConfigFileType)
@@ -29,7 +30,17 @@ func Bootstrap(active string) {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("读取配置文件失败: %v", err)
 	}
+}
 
+func Register(conf ...Configuration) error {
+	if len(conf) < 1 {
+		return fmt.Errorf("必须注册一个配置初始化器")
+	}
+	initializers = append(initializers, conf...)
+	return nil
+}
+
+func Bootstrap(active string) {
 	if active == "" {
 		active = viper.GetString("active")
 		if active == "nil" {
@@ -52,13 +63,12 @@ func Bootstrap(active string) {
 		log.Fatal("配置文件格式错误")
 	}
 	config.SetAppCfg(appCfg)
-
 	autoConfigure()
 }
 
 func autoConfigure() {
 	for _, v := range initializers {
-		err := v.Init(config.GetAppCfg())
+		err := v.Init()
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/qq754174349/ht-frame/autoconfigure"
-	"github.com/qq754174349/ht-frame/config"
-	_ "github.com/qq754174349/ht-frame/consul"
+	baseConfig "github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
 	"github.com/qq754174349/ht-frame/web/middlewares"
+	"github.com/spf13/viper"
 	"net/http"
 	"os"
 	"os/signal"
@@ -18,19 +18,35 @@ import (
 
 type AutoConfig struct{}
 
-var cfg = config.WebConfig{}
+var config *Web
 
-func init() {
-	autoconfigure.Register(AutoConfig{})
+type Web struct {
+	Web Config
 }
 
-func (AutoConfig) Init(webCfg *config.AppConfig) error {
+type Config struct {
+	Port string
+}
+
+func init() {
+	err := autoconfigure.Register(AutoConfig{})
+	if err != nil {
+		logger.Fatal("web 自动配置注册失败")
+	}
+}
+
+func (AutoConfig) Init() error {
+	config = &Web{}
+	err := viper.Unmarshal(config)
+	if err != nil {
+		logger.Fatal("配置文件格式错误")
+	}
+	appCig := baseConfig.GetAppCfg()
 	gin.DefaultWriter = logger.Writer()
 	gin.DefaultErrorWriter = logger.Writer()
-	if webCfg.Active == "pro" {
+	if appCig.Active == "pro" {
 		gin.SetMode(gin.ReleaseMode)
 	}
-	cfg = webCfg.Web
 	return nil
 }
 
@@ -49,7 +65,7 @@ func Run(regRoutes func(engine *gin.Engine), opts ...gin.OptionFunc) error {
 
 	regRoutes(engine)
 	srv := &http.Server{
-		Addr:    ":" + cfg.Port,
+		Addr:    ":" + config.Web.Port,
 		Handler: engine,
 	}
 
@@ -70,4 +86,15 @@ func Run(regRoutes func(engine *gin.Engine), opts ...gin.OptionFunc) error {
 	}
 
 	return nil
+}
+
+func GetConfig() *Config {
+	if config == nil {
+		config = &Web{}
+		err := viper.Unmarshal(config)
+		if err != nil {
+			logger.Fatal("配置文件格式错误")
+		}
+	}
+	return &config.Web
 }

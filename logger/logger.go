@@ -2,11 +2,14 @@ package logger
 
 import (
 	"github.com/qq754174349/ht-frame/autoconfigure"
-	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger/internal"
 	"github.com/qq754174349/ht-frame/logger/logiface"
+	"github.com/spf13/viper"
 	"io"
 )
+
+var config *logiface.Log
+var log logiface.Logger
 
 type AutoConfig struct{}
 
@@ -15,19 +18,25 @@ const (
 	defaultOutputPaths = "logs/"
 )
 
-var log logiface.Logger
-
 func init() {
-	autoconfigure.Register(AutoConfig{})
+	err := autoconfigure.Register(AutoConfig{})
+	if err != nil {
+		log.Fatal("logger 自动配置注册失败")
+	}
 }
 
-func (AutoConfig) Init(cfg *config.AppConfig) error {
-	logConfig := cfg.Log
+func (AutoConfig) Init() error {
+	config = &logiface.Log{}
+	err := viper.Unmarshal(config)
+	if err != nil {
+		log.Fatal("配置文件格式错误")
+	}
+	logConfig := config.Log
 	InitLogger(logConfig)
 	return nil
 }
 
-func InitLogger(config config.LogConfig) {
+func InitLogger(config logiface.Config) {
 	if config.Level == "" {
 		config.Level = defaultLevel
 	}

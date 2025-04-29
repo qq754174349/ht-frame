@@ -4,33 +4,53 @@ import (
 	"fmt"
 	"github.com/hashicorp/consul/api"
 	"github.com/qq754174349/ht-frame/autoconfigure"
-	"github.com/qq754174349/ht-frame/config"
-	"log"
+	baseConfig "github.com/qq754174349/ht-frame/config"
+	log "github.com/qq754174349/ht-frame/logger"
+	"github.com/qq754174349/ht-frame/web"
+	"github.com/spf13/viper"
 	"net"
 	"strconv"
 	"time"
 )
 
+var config *Consul
+
 type AutoConfig struct{}
 
+type Consul struct {
+	Consul Config
+}
+
+type Config struct {
+	Addr string
+}
+
 func init() {
-	autoconfigure.Register(&AutoConfig{})
+	err := autoconfigure.Register(AutoConfig{})
+	if err != nil {
+		log.Fatal("consul 自动配置注册失败")
+	}
 }
 
-func (AutoConfig) Init(cfg *config.AppConfig) error {
-	return StartConsulAutoRegister(cfg)
+func (AutoConfig) Init() error {
+	config = &Consul{}
+	err := viper.Unmarshal(config)
+	if err != nil {
+		log.Fatal("配置文件格式错误")
+	}
+	return StartConsulAutoRegister(config)
 }
 
-func StartConsulAutoRegister(cfg *config.AppConfig) error {
-	port, err := strconv.Atoi(cfg.Web.Port)
+func StartConsulAutoRegister(cfg *Consul) error {
+	port, err := strconv.Atoi(web.GetConfig().Port)
 	if err != nil {
 		return fmt.Errorf("端口转换失败: %v", err)
 	}
 
 	localIP := GetOutboundIP()
 	reg := &api.AgentServiceRegistration{
-		ID:   cfg.AppName,
-		Name: cfg.AppName,
+		ID:   baseConfig.GetAppCfg().AppName,
+		Name: baseConfig.GetAppCfg().AppName,
 		Port: port,
 		Check: &api.AgentServiceCheck{
 			HTTP:     fmt.Sprintf("http://%s:%d/health", localIP, port),
@@ -60,13 +80,13 @@ func monitorConsulAndRegister(client *api.Client, reg *api.AgentServiceRegistrat
 	for range ticker.C {
 		_, err := client.Agent().Self()
 		if err != nil {
-			log.Println("[Consul] 不可用，等待恢复...")
+			log.Warn("[Consul] 不可用，等待恢复...")
 			continue
 		}
 
 		services, err := client.Agent().Services()
 		if err != nil {
-			log.Println("[Consul] 获取服务列表失败：", err)
+			log.Warn("[Consul] 获取服务列表失败：", err)
 			continue
 		}
 
@@ -77,9 +97,9 @@ func monitorConsulAndRegister(client *api.Client, reg *api.AgentServiceRegistrat
 
 		// 注册服务
 		if err := client.Agent().ServiceRegister(reg); err != nil {
-			log.Println("[Consul] 注册失败：", err)
+			log.Warn("[Consul] 注册失败：", err)
 		} else {
-			log.Println("[Consul] 注册成功")
+			log.Info("[Consul] 注册成功")
 		}
 	}
 }

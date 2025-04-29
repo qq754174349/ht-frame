@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"github.com/natefinch/lumberjack"
-	"github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger/logiface"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -18,8 +17,8 @@ type zapLog struct {
 	logger *zap.SugaredLogger
 }
 
-func NewZapLog(appLogCfg *config.LogConfig) logiface.Logger {
-	level, err := zap.ParseAtomicLevel(appLogCfg.Level)
+func NewZapLog(logCfg *logiface.Config) logiface.Logger {
+	level, err := zap.ParseAtomicLevel(logCfg.Level)
 	if err != nil {
 		panic(err)
 	}
@@ -30,7 +29,7 @@ func NewZapLog(appLogCfg *config.LogConfig) logiface.Logger {
 	stdoutEncoder := zapcore.NewCore(encoder, stdWriter, level)
 
 	// 文件输出日志
-	fileWriter := zapcore.AddSync(newFileWriteSyncer(appLogCfg.OutputPaths, appLogCfg))
+	fileWriter := zapcore.AddSync(newFileWriteSyncer(logCfg.OutputPaths, logCfg))
 	fileEncoder := zapcore.NewCore(encoder, fileWriter, level)
 
 	// 日志采样
@@ -47,7 +46,7 @@ func NewZapLog(appLogCfg *config.LogConfig) logiface.Logger {
 	sugar := logger.Sugar()
 	sugar.Info("init log complete")
 	sugar.Info("use zap log")
-	sugar.Infof("current log level %s", appLogCfg.Level)
+	sugar.Infof("current log level %s", logCfg.Level)
 
 	return &zapLog{logger: sugar.WithOptions(zap.AddCallerSkip(SKIP))}
 }
@@ -65,7 +64,7 @@ func newEncoderConfig() *zapcore.EncoderConfig {
 	}
 }
 
-func newFileWriteSyncer(outPutPath string, cfg *config.LogConfig) *lumberjack.Logger {
+func newFileWriteSyncer(outPutPath string, cfg *logiface.Config) *lumberjack.Logger {
 	logFile := fmt.Sprintf("%s-%s.log", outPutPath, time.Now().Format("2006-01-02-15"))
 	return &lumberjack.Logger{
 		Filename:   logFile,
