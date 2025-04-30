@@ -74,3 +74,11 @@ func autoConfigure() {
 		}
 	}
 }
+
+// ConfigRead 配置文件读取，读取统一走这
+func ConfigRead(rawVal any) {
+	err := viper.Unmarshal(rawVal)
+	if err != nil {
+		log.Fatal("配置文件格式错误")
+	}
+}

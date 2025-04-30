@@ -4,7 +4,6 @@ import (
 	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/logger/internal"
 	"github.com/qq754174349/ht-frame/logger/logiface"
-	"github.com/spf13/viper"
 	"io"
 )
 
@@ -27,10 +26,7 @@ func init() {
 
 func (AutoConfig) Init() error {
 	config = &logiface.Log{}
-	err := viper.Unmarshal(config)
-	if err != nil {
-		log.Fatal("配置文件格式错误")
-	}
+	autoconfigure.ConfigRead(config)
 	logConfig := config.Log
 	InitLogger(logConfig)
 	return nil

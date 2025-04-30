@@ -7,7 +7,6 @@ import (
 	baseConfig "github.com/qq754174349/ht-frame/config"
 	log "github.com/qq754174349/ht-frame/logger"
 	"github.com/qq754174349/ht-frame/web"
-	"github.com/spf13/viper"
 	"net"
 	"strconv"
 	"time"
@@ -34,10 +33,7 @@ func init() {
 
 func (AutoConfig) Init() error {
 	config = &Consul{}
-	err := viper.Unmarshal(config)
-	if err != nil {
-		log.Fatal("配置文件格式错误")
-	}
+	autoconfigure.ConfigRead(config)
 	return StartConsulAutoRegister(config)
 }
 

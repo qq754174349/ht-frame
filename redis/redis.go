@@ -6,7 +6,6 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/logger"
-	"github.com/spf13/viper"
 	"sync"
 	"time"
 )
@@ -39,10 +38,7 @@ func init() {
 
 func (AutoConfig) Init() error {
 	config = &Redis{}
-	err := viper.Unmarshal(config)
-	if err != nil {
-		logger.Fatal("配置文件格式错误")
-	}
+	autoconfigure.ConfigRead(config)
 	first := true
 	for name, redisCfg := range config.Redis {
 		if err := initRedis(redisCfg, name); err != nil {

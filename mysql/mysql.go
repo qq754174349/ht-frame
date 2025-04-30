@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/qq754174349/ht-frame/autoconfigure"
 	"github.com/qq754174349/ht-frame/logger"
-	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -49,10 +48,7 @@ func init() {
 
 func (AutoConfig) Init() error {
 	config = &Mysql{}
-	err := viper.Unmarshal(config)
-	if err != nil {
-		logger.Fatal("配置文件格式错误")
-	}
+	autoconfigure.ConfigRead(config)
 	first := true
 	for name, mysqlCfg := range config.Mysql {
 		if err := initMySQL(mysqlCfg, name); err != nil {

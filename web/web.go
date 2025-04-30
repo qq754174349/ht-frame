@@ -8,7 +8,6 @@ import (
 	baseConfig "github.com/qq754174349/ht-frame/config"
 	"github.com/qq754174349/ht-frame/logger"
 	"github.com/qq754174349/ht-frame/web/middlewares"
-	"github.com/spf13/viper"
 	"net/http"
 	"os"
 	"os/signal"
@@ -37,10 +36,7 @@ func init() {
 
 func (AutoConfig) Init() error {
 	config = &Web{}
-	err := viper.Unmarshal(config)
-	if err != nil {
-		logger.Fatal("配置文件格式错误")
-	}
+	autoconfigure.ConfigRead(config)
 	appCig := baseConfig.GetAppCfg()
 	gin.DefaultWriter = logger.Writer()
 	gin.DefaultErrorWriter = logger.Writer()
@@ -91,10 +87,7 @@ func Run(regRoutes func(engine *gin.Engine), opts ...gin.OptionFunc) error {
 func GetConfig() *Config {
 	if config == nil {
 		config = &Web{}
-		err := viper.Unmarshal(config)
-		if err != nil {
-			logger.Fatal("配置文件格式错误")
-		}
+		autoconfigure.ConfigRead(config)
 	}
 	return &config.Web
 }
